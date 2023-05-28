@@ -17,9 +17,33 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import generics
 
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import UserSerializer
+from .serializers import UserSerializer, MenuSerializer, BookingSerializer
+
+
+
+
+class MenuListApiView(generics.ListAPIView):
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+
+
+
+class SingleMenuApiView(generics.RetrieveDestroyAPIView):
+    queryset = Menu.objects.all()
+    serializer_class = MenuSerializer
+
+
+class BookListCreateApiView(generics.ListCreateAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer()
+    permission_classes = [IsAuthenticated]
+
+
+
+
 
 
 # Create your views here.
