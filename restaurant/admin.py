@@ -38,6 +38,8 @@ class CustomUserAdmin(UserAdmin):
     ordering = ("username",)
 
 
+
 admin.site.register(CustomUser, CustomUserAdmin)
 
 admin.site.register(Menu)
+admin.site.register(Booking)

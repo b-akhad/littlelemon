@@ -1,0 +1,39 @@
+from django.test import TestCase, Client
+from django.urls import reverse
+from django.contrib.auth.models import User
+from rest_framework import status
+
+from restaurant.models import Menu
+from restaurant.serializers import MenuSerializer
+
+class MenuViewTest(TestCase):
+    def setUp(self) -> None:
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='test',
+            password='testpassword'
+        )
+        
+        self.osh = Menu.objects.create(title='osh', price=12, menu_item_description="Uzbek national food")
+        self.burger = Menu.objects.create(title='Burger', price=9, menu_item_description="made by the chef")
+
+    
+    def loginAsTestUser(self) -> None:
+        self.client.login(username='test', password='testpassword')
+    
+    def test_view_authentication(self) -> None:
+        response = self.client.get(reverse('menu'))
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.loginAsTestUser()
+        response = self.client.get(reverse('menu'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    
+    def test_getall(self):
+        self.loginAsTestUser()
+        response = self.client.get(reverse('menu'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        menu = Menu.objects.all()
+        serializer = MenuSerializer(menu, many=True)
+        self.assertEqual(response.data, serializer.data)

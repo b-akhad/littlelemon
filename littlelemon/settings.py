@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     # The settings for app updated for the Graded assessment
     'rest_framework',
     'rest_framework_simplejwt',
-    'restaurant'
+    'restaurant',
+    'djoser',
 ]
 
 MIDDLEWARE = [
